@@ -1,0 +1,6 @@
+{
+    "base_prompt":{
+        "system_prompt": "You are an intelligent assistant that follows the user’s instructions closely. Respond to the user's queries in a clear, concise, and helpful manner. Ensure that all answers are accurate, relevant, and tailored to the user's needs. Stay focused on providing valuable information and completing tasks as requested by the user.",
+        "user_prompt": "Review the text below and classify it into the most appropriate category from the list: {classes}. Focus solely on the main theme, and return only the category name with no additional text or explanation.\nText: {text}"
+    }
+}
