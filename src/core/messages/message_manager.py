@@ -1,6 +1,11 @@
 from src.core.messages.openai_message import OpenAIMessageGenerator
 from src.core.messages.str_message import StrMessageGenerator
 from src.core.messages.llama_message import LlamaMessageGenerator
+from src.core.messages.phi35_message import Phi35MessageGenerator
+from src.core.messages.aya_expanse_message import AyaExpanseMessageGenerator
+from src.core.messages.granite_message import GraniteMessageGenerator
+from src.core.messages.mistral_message import MistralMessageGenerator
+from src.core.messages.qwen25_message import Qwen25MessageGenerator
 
 class MessageManager:
     """Manager class to handle message generation for different model types."""
@@ -9,9 +14,14 @@ class MessageManager:
         """Initializes the MessageManager with supported message generator classes."""
         self.message_generators = {
             'openai': OpenAIMessageGenerator(),
-            'gemini': StrMessageGenerator(),
+            'str': StrMessageGenerator(),
             'sabia-7b': OpenAIMessageGenerator(),
-            'llama-3.1': LlamaMessageGenerator()
+            'llama-3.2': LlamaMessageGenerator(),
+            'phi-3.5': Phi35MessageGenerator(),
+            'aya_expanse': AyaExpanseMessageGenerator(),
+            'granite': GraniteMessageGenerator(),
+            'mistral': MistralMessageGenerator(),
+            'qwen-2.5': Qwen25MessageGenerator()
         }
 
         self.message_generator = self.message_generators.get(message_type, None)

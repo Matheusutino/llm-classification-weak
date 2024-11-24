@@ -1,16 +1,20 @@
+import random
 import argparse
 import pandas as pd
 from tqdm import tqdm 
 from src.core.messages.message_manager import MessageManager
 from src.core.predictors.predictor_manager import PredictionManager
-from src.core.utils import get_prompts, create_directory
+from src.core.utils import get_prompts, check_directory_exists, create_directory, get_last_element_from_path
 
 def llm_predict(dataset_path: str, service: str, message_type: str, prompt_name: str, **kwargs):
     # Read the dataset
-    dataset = pd.read_csv(dataset_path)[0:3]
+    dataset = pd.read_csv(dataset_path)
+    dataset = dataset.sample(frac=1, random_state=42).reset_index(drop=True)[0:1000]
 
-    results_path = "results"
-    create_directory(results_path)
+    dataset_name = get_last_element_from_path(dataset_path)
+    model_identifier = kwargs['filename'] if kwargs['filename'] else kwargs['model_name'] 
+    results_path = f"datasets/llm_predict/{model_identifier}"
+    check_directory_exists(results_path)
 
     # Initialize the managers
     message_manager = MessageManager(message_type=message_type)
@@ -18,20 +22,42 @@ def llm_predict(dataset_path: str, service: str, message_type: str, prompt_name:
 
     user_prompt, system_prompt = get_prompts(prompt_name)
 
-    classes = ', '.join(dataset['class'].unique().tolist())
+    classes = '\n'.join(dataset['class'].unique().tolist())
+    # examples = dataset.groupby('class').first().reset_index()
+    # few_shot_examples = "\n".join([f"Text: {row['text']}\nCategory: {row['class']}" for _, row in examples.iterrows()])
+    # classes = dataset['class'].unique().tolist()
 
     results = []
 
-    for text in tqdm(dataset['text'], desc="Processando textos"):
-        user_prompt = user_prompt.format(text = text, classes = classes)
-        message = message_manager.generate_message(user_prompt, system_prompt)
-        result = prediction_manager.predict(message)
+    for text in tqdm(dataset['text'].tolist(), desc="Processando textos"):
+        # Format the user prompt with the specific text and classes
+        # formatted_user_prompt = user_prompt.format(text=text, few_shot_examples=few_shot_examples, classes=classes)
+        formatted_user_prompt = user_prompt.format(text=text, classes=classes)
+        message = message_manager.generate_message(formatted_user_prompt, system_prompt)
+        
+        use_fixed_temperature = True
+        # Loop até encontrar um resultado válido
+        valid_result = False
+        while not valid_result:
+            if use_fixed_temperature:
+                temperature = kwargs["temperature"]
+                use_fixed_temperature = False  # Só use a fixa uma vez
+            else:
+                temperature = random.uniform(0.0, 1.0)
+                
+            result = prediction_manager.predict(message, temperature = temperature).strip()
 
-        results.append(result)
+            # Verifique se o result está nas classes
+            if result in classes:
+                valid_result = True
+                results.append(result)
+            else:
+                print(f"Resultado '{result}' não está nas classes, tentando novamente...")
     
     dataset['predict_llm'] = results
 
-    dataset.to_csv(f'{results_path}/results.csv', index=False)
+    create_directory(results_path)
+    dataset.to_csv(f'{results_path}/{dataset_name}', index=False)
 
 if __name__ == "__main__":
     # Initialize the ArgumentParser
@@ -47,6 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('--repo_id', type=str, help='Repository ID for the model (optional)')
     parser.add_argument('--filename', type=str, help='Filename for input data (optional)')
     parser.add_argument('--model_name', type=str, help='Model name for prediction (optional)')
+    parser.add_argument('--temperature', type=float, default=0.3, help='Temperature for llm inference (optional)')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -59,6 +86,7 @@ if __name__ == "__main__":
         prompt_name = args.prompt_name, 
         repo_id = args.repo_id,
         filename = args.filename,
-        model_name = args.model_name
+        model_name = args.model_name,
+        temperature = args.temperature
     )
 

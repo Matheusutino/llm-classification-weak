@@ -1,7 +1,7 @@
 from src.core.messages.base import MessageGenerator
 
 class LlamaMessageGenerator(MessageGenerator):
-    """Implementation of the MessageGenerator interface for Llama 3.1."""
+    """Implementation of the MessageGenerator interface for Llama 3.2."""
 
     def generate_message(self, prompt: str, specialist: str = None) -> str:
         """Generates a formatted message for Llama.

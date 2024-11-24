@@ -2,6 +2,7 @@ from typing import List, Dict, Union
 from src.core.predictors.openai_predictor import OpenAIPredictor
 from src.core.predictors.maritaca_ai import MaritacaAIPredictor
 from src.core.predictors.llama_cpp_predictor import LlamaCppPredictor
+from src.core.predictors.ollama_predictor import OllamaPredictor
 
 class PredictionManager:
     """Manager class to handle predictions for a single model type."""
@@ -23,6 +24,8 @@ class PredictionManager:
             filename = kwargs.get('filename')
             device = kwargs.get('device', 'gpu')
             self.predictor = LlamaCppPredictor(repo_id = repo_id, filename = filename, device=device)
+        elif service.lower() == 'ollama':
+            self.predictor = OllamaPredictor(model_name=kwargs.get('model_name'))
         else:
             raise ValueError(f"Unsupported service: {service}. Please choose from 'openai', 'maritaca_ai', 'llama_cpp', or 'huggingface'.")
 
@@ -37,4 +40,4 @@ class PredictionManager:
         Returns:
             str: The prediction result.
         """
-        return self.predictor.predict(messages, **kwargs)
+        return self.predictor.predict(messages, temperature = temperature, **kwargs)

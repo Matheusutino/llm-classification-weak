@@ -1,6 +1,6 @@
 from src.core.messages.base import MessageGenerator
 
-class StrMessageGenerator(MessageGenerator):
+class MistralMessageGenerator(MessageGenerator):
     """
     A message generator that returns the input prompt as the message.
 
@@ -17,7 +17,10 @@ class StrMessageGenerator(MessageGenerator):
 
     def generate_message(self, prompt: str, specialist = None) -> str:
         if specialist:
-            message = f'{specialist}\n{prompt}'
+            final_prompt = f'{specialist}\n{prompt}'
         else:
-            message = prompt
+            final_prompt = prompt
+        
+        message = f"<s>[INST]{final_prompt}[/INST]</s>"
+
         return message

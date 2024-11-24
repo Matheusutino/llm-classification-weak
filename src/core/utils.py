@@ -4,6 +4,19 @@ import numpy as np
 import pandas as pd
 from typing import Any, Union
 
+def check_directory_exists(directory_path: str) -> None:
+    """
+    Checks if a directory exists and raises an error if it does.
+
+    Args:
+        directory_path (str): The path to the directory to check.
+
+    Raises:
+        FileExistsError: If the specified directory already exists.
+    """
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        raise FileExistsError(f"The directory '{directory_path}' already exists.")
+
 def create_directory(directory_path: str) -> bool:
     """Create a directory if it does not exist. Raise an error if it already exists.
 
@@ -61,3 +74,21 @@ def get_prompts(prompt_name: str, path_prompts: str = "configs/prompts.json"):
         return user_prompt, system_prompt
     else:
         return f"Prompt '{prompt_name}' not found."
+    
+
+
+def get_value_by_key_json(file_path: str, key: str) -> str:
+    """Reads a JSON file and retrieves the value associated with a given key.
+
+    Args:
+        file_path (str): The path to the JSON file.
+        key (str): The key whose value needs to be fetched.
+
+    Returns:
+        any: The value associated with the key, or a message if the key is not found.
+    """
+    # Read the JSON file
+    data = read_json(file_path)
+    
+    # Return the value for the given key
+    return data.get(key, "Key not found")
