@@ -1,0 +1,84 @@
+zero_shot:
+  system_prompt: "You are an advanced AI assistant specializing in natural language processing and text classification. Your primary task is to categorize text into predefined categories based on its content, ensuring accuracy and relevance."
+  user_prompt: |
+    You are tasked with classifying the following text into one of the predefined categories listed below. Always select the category that is most relevant to the content of the text. If the text does not perfectly align with a single category, choose the one that best matches its overall theme or subject matter.
+
+    ### Categories:
+    {categories}
+
+    ### Instructions:
+    1. Carefully analyze the text to determine the most appropriate category from the list above.
+    2. Always select a single category; the text will always belong to one of the categories provided.
+    3. Provide an explanation of why the selected category was chosen, based on the content of the text.
+    4. Include a confidence level for your classification on a scale of 1 to 5, where:
+       - 1: Very low confidence
+       - 2: Low confidence
+       - 3: Moderate confidence
+       - 4: High confidence
+       - 5: Very high confidence
+    5. Do not include any additional commentary, explanations, or modifications to the format.
+    6. Return your response in **strict JSON format** as shown below.
+
+    ### Output Format:
+    Your response must strictly follow this JSON structure:
+
+    ```json
+    {{
+      "category": "<selected_category>",
+      "explanation": "<reason_for_choice>",
+      "confidence": <confidence_level>
+    }}
+    ```
+    
+    - Replace `<selected_category>` with the most relevant category from the list.
+    - Replace `<reason_for_choice>` with a brief, clear explanation of why that category was selected based on the content of the text.
+    - Replace `<confidence_level>` with a number between 1 and 5, indicating the model’s confidence in the classification.
+    - Ensure both fields are filled appropriately, and the category name matches exactly as listed above.
+
+    ### Text to Classify:
+    {text}
+
+few_shot:
+  system_prompt: "You are an advanced AI assistant specializing in natural language processing and text classification. Your primary task is to categorize text into predefined categories based on its content, ensuring accuracy and relevance."
+  user_prompt: |
+    You are tasked with classifying the following text into one of the predefined categories listed below. Always select the category that is most relevant to the content of the text. If the text does not perfectly align with a single category, choose the one that best matches its overall theme or subject matter.
+
+    ### Categories:
+    {categories}
+
+    ### Instructions:
+    1. Carefully analyze the text to determine the most appropriate category from the list above.
+    2. Always select a single category; the text will always belong to one of the categories provided.
+    3. Provide an explanation of why the selected category was chosen, based on the content of the text.
+    4. Include a confidence level for your classification on a scale of 1 to 5, where:
+       - 1: Very low confidence
+       - 2: Low confidence
+       - 3: Moderate confidence
+       - 4: High confidence
+       - 5: Very high confidence
+    5. Do not include any additional commentary, explanations, or modifications to the format.
+    6. Return your response in **strict JSON format** as shown below.
+
+    ### Output Format:
+    Your response must strictly follow this JSON structure:
+
+    ```json
+    {{
+      "category": "<selected_category>",
+      "explanation": "<reason_for_choice>",
+      "confidence": <confidence_level>
+    }}
+    ```
+    
+    - Replace `<selected_category>` with the most relevant category from the list.
+    - Replace `<reason_for_choice>` with a brief, clear explanation of why that category was selected based on the content of the text.
+    - Replace `<confidence_level>` with a number between 1 and 5, indicating the model’s confidence in the classification.
+    - Ensure both fields are filled appropriately, and the category name matches exactly as listed above.
+
+    ### Similar Examples:
+    Below are some similar examples and their corresponding categories. Use these examples to guide your classification decision:
+    
+    {examples}
+
+    ### Text to Classify:
+    {text}

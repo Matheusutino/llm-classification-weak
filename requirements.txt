@@ -1,0 +1,14 @@
+huggingface_hub
+numpy
+ollama==0.4.6
+openai==1.59.8
+pandas==2.2.3
+python-dotenv==1.0.1
+PyYAML==6.0.2
+scikit_learn==1.6.1
+sentence_transformers
+tenacity==9.0.0
+tqdm
+vllm
+together
+transformers==4.53.2

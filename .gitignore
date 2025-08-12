@@ -1,3 +1,5 @@
 .env
 __pycache__
-weak-llm
+weak
+main.ipynb
+llm_predict

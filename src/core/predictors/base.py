@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Union
 
 class PredictionModel(ABC):
     """Abstract base class for prediction models."""
 
     @abstractmethod
-    def predict(self, messages: Union[str, List[Dict[str, str]]], max_tokens: int, temperature: float) -> str:
+    def predict(self, system_prompt: str, user_prompt: str, max_tokens: int, temperature: float, **kwargs) -> str:
         """
         Abstract method to perform prediction.
 
         Args:
-            messages (Union[str, List[Dict[str, str]]]): The input data for prediction. 
-                It can be a single string or a list of dictionaries, where each dictionary
-                represents a message with string keys and values.
+            system_prompt (str): The system message.
+            user_prompt (str): The user message.
+            max_tokens (int): Maximum tokens for generation.
+            temperature (float): Sampling temperature.
 
         Returns:
             str: The prediction result.
